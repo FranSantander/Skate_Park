@@ -9,15 +9,33 @@
         <div class="form-group">
           <div class="form-group">
             <label>Email</label>
-            <input class="form-control w-50 m-auto" />
+            <input type="email" name="email" id="email" class="form-control w-50 m-auto" />
           </div>
           <div class="form-group">
             <label>Password</label>
-            <input class="form-control w-50 m-auto" />
+            <input type="password" name="password" id="password" class="form-control w-50 m-auto" />
           </div>
         </div>
         <button class="btn btn-success mb-3">Ingresar</button>
-        <p>¿Aún no tienes cuenta? <a href="#">Regístrate</a></p>
+        <p>¿Aún no tienes cuenta? <a href="/Registro">Regístrate</a></p>
       </form>
     </div>
   </body>
+
+  <script>
+  const verificacion = async () => {
+    const email = document.getElementById('email').value
+    const password = document.getElementById('password').value
+    const payload = { email, password }
+    try {
+      const { data: token } = await axios.post('/verify', payload)
+      alert(`¡Autentificación y autorización exitosa!`)
+      window.location.href = `/Evidencias?token=${token}`
+    }
+    catch ({ response }) {
+      const { data } = response
+      const { error } = data
+      alert(error)
+    }
+  }
+</script>

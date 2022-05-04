@@ -1,12 +1,12 @@
-<h1>Skate Park</h1>
-<div class="py-4">
-  <h2>Lista de participantes</h2>
+    <h1>Skate Park</h1>
 
-  <hr />
+    <div class="py-4">
+  <h2>Administración</h2>
+  <hr class="w-50 m-auto" />
 
-  <table class="table table-dark">
+  <table class="table w-50 m-auto mb-3">
     <thead>
-      <tr>
+      <tr class="">
         <th scope="col">#</th>
         <th scope="col">Foto</th>
         <th scope="col">Nombre</th>
@@ -18,55 +18,68 @@
     <tbody id="cuerpo">
       <tr>
         <th scope="row">1</th>
-        <td>
+        <td class="py-3">
           <div class="mx-auto"></div>
         </td>
         <td>Tony Hawk</td>
         <td>12</td>
         <td>Kickflip</td>
-        <td class="text-success font-weight-bold">Aprobado</td>
+        <td><input type="checkbox" checked /></td>
       </tr>
       <tr>
         <th scope="row">2</th>
-        <td>
+        <td class="py-3">
           <div class="mx-auto"></div>
         </td>
         <td>Evelien Bouilliart</td>
         <td>10</td>
         <td>Heelflip</td>
-        <td class="text-success font-weight-bold">Aprobado</td>
+        <td><input type="checkbox" checked/></td>
       </tr>
       <tr>
         <th scope="row">3</th>
-        <td>
+        <td class="py-3">
           <div class="mx-auto"></div>
         </td>
         <td>Danny Way</td>
         <td>8</td>
         <td>Ollie</td>
-        <td class="text-warning font-weight-bold">En revisión</td>
+        <td><input type="checkbox"></td>
       </tr>
+
       {{#each usuarios}}
       <tr>
-        <th>{{ @index }}</th>
-        <td><img src='/uploads/{{this.foto}}' style='height: 60px;width: 60px;'></td>
+        <th>{{fixInde @index }}</th>
+        <td><img src="/uploads/{{this.foto}}" style="height: 60px;width: 60px;" alt="Foto de perfil"></td>
         <td>{{this.nombre}}</td>
         <td>{{this.anos_experiencia}}</td>
         <td>{{this.especialidad}}</td>
-        <td class="estado">{{this.estado}}</td>
+        <td>
+          <input type="checkbox" {{#if this.estado}} checked {{/if}} onclick="changeStatus({{this.id}}, this)">
+          </td>
       </tr>
       {{/each}}
     </tbody>
   </table>
-  <a href="/Login">Iniciar Sesión</a> |
-  <a href="/Registro">Registrarme</a>
+  <a href="/">Lista de participantes</a>
 </div>
 
 
 <script>
-  $('.estado').each(function (index, element) {
-    $(element).text() == 'true'
-      ? $(element).addClass('text-success font-weight-bold').text('Aprobado')
-      : $(element).addClass('text-warning font-weight-bold').text('En revisión');
-  });
+  const changeStatus = async (id, e) => {
+    const estado = e.checked
+    try {
+    await axios.put("/usuarios", {
+      id,
+      estado
+    })
+
+    alert(estado ? "Usuario activado" : "Usuario desactivado")
+    }
+    catch ({ response }) { 
+      const { data } = response 
+      const { error } = data 
+      alert(error)
+    }   
+  }
 </script>
